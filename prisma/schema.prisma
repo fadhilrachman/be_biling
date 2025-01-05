@@ -1,0 +1,130 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id String @id @default(uuid())
+  user_name String
+  email String @unique
+  password String
+  is_change_password Boolean @default(false)
+  addres String?
+  phone String?
+  lat_long String?
+  client_notes String?
+  role Role
+  created_at DateTime @default(now())
+  update_at DateTime @updatedAt 
+  transaction Transaction[]
+  report Report[]
+  reportFeedback ReportFeedback[]
+  notification Notification[]
+}
+
+model Product {
+  id String @id @default(uuid())
+  name String
+  description String? @db.Text
+  price Int
+  category Category @relation(fields: [category_id], references: [id])
+  category_id String 
+
+  created_at DateTime @default(now())
+  update_at DateTime @updatedAt 
+  transaction Transaction[]
+}
+
+model Category {
+  id String @id @default(uuid())
+  name String
+  description String?
+  product Product[]
+  created_at DateTime @default(now())
+  update_at DateTime @updatedAt 
+}
+
+model Transaction{
+  id String @id @default(uuid())
+  due_date DateTime
+  description String? @db.Text
+  product Product @relation(fields: [product_id], references: [id])
+  product_id String 
+  is_paid Boolean @default(false)
+  user User @relation(fields: [user_id], references: [id])
+  user_id String 
+
+  created_at DateTime @default(now())
+  update_at DateTime @updatedAt 
+}
+
+model Report{
+  id String @id @default(uuid())
+  description String? @db.Text
+  title String
+  user User @relation(fields: [user_id], references: [id])
+  user_id String 
+  status ReportStatus @default(awaiting_response)
+
+  created_at DateTime @default(now())
+  update_at DateTime @updatedAt 
+
+  reportFeedback ReportFeedback[]
+
+}
+
+model ReportFeedback{
+  id String @id @default(uuid())
+ 
+  description String? @db.Text
+  title String?
+
+  user User @relation(fields: [user_id], references: [id])
+  user_id String 
+
+  report Report @relation(fields: [report_id], references: [id])
+  report_id String 
+
+  created_at DateTime @default(now())
+  update_at DateTime @updatedAt 
+}
+
+model Notification{
+  id String @id @default(uuid())
+  module Module
+  is_read Boolean
+  is_admin Boolean @default(false)
+  id_relation String
+  message String
+  user User? @relation(fields: [user_id], references: [id])
+  user_id String? 
+
+  created_at DateTime @default(now())
+  update_at DateTime @updatedAt 
+}
+
+enum Module{
+  transaction
+  report
+} 
+enum Role{
+  superadmin
+  customer
+  admin
+}
+
+enum ReportStatus{
+  awaiting_response
+  on_progress
+  success
+} 
