@@ -16,7 +16,7 @@ const postLogin = async ({ req, res }) => {
       return res.status(401).json({ message: "Login failed" });
 
     if (checkCredenttial.role != "customer")
-      return res.status(401).json({ message: "Just customer can enter" });
+      return res.status(401).json({ message: "Just customer can access" });
 
     const checkPassword = await bcrypt.compare(
       password,
@@ -25,9 +25,14 @@ const postLogin = async ({ req, res }) => {
 
     if (!checkPassword) return res.status(403).json({ message: "Gagal login" });
 
-    const token = await jwt.sign(checkCredenttial, process.env.JWT_KEY, {
-      expiresIn: "28d",
-    });
+    const token = await jwt.sign(
+      checkCredenttial,
+      "aksjcoacsnoq,31sdasdasd.3",
+
+      {
+        expiresIn: "28d",
+      }
+    );
     return res.status(200).json({
       message: "Login sukses",
       result: {

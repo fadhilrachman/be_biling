@@ -90,6 +90,7 @@ const getAdmin = async ({ req, res }) => {
         lat_long: true,
         phone: true,
         created_at: true,
+        role: true,
       },
     });
 

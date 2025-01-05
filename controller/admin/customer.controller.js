@@ -8,6 +8,14 @@ const postCustomer = async ({ req, res }) => {
   const { email, user_name, addres, client_notes, lat_long, phone } = req.body;
   const defaultPassword = await bcrypt.hash("123456", 10);
   try {
+    const validateDuplicate = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    if (validateDuplicate)
+      return res.status(400).json({ message: "The email already exists" });
     const result = await prisma.user.create({
       data: {
         email,

@@ -4,14 +4,14 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 const postProduct = async ({ req, res }) => {
-  const { name, description, price, product_id } = req.body;
+  const { name, description, price, category_id } = req.body;
   try {
     const result = await prisma.product.create({
       data: {
         name,
         description,
         price,
-        product_id,
+        category_id,
       },
     });
     return res.status(201).json({ message: "Succes create product", result });
@@ -22,14 +22,14 @@ const postProduct = async ({ req, res }) => {
 };
 
 const putProduct = async ({ req, res, product_id }) => {
-  const { name, description, price } = req.body;
+  const { name, description, price, category_id } = req.body;
   try {
     const result = await prisma.product.update({
       data: {
         name,
         description,
         price,
-        product_id,
+        category_id,
       },
       where: {
         id: product_id,

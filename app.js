@@ -1,6 +1,5 @@
 const createError = require("http-errors");
 const express = require("express");
-const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 
@@ -8,6 +7,9 @@ const adminRouter = require("./routes/admin/index");
 const customerRouter = require("./routes/customer/index");
 
 const app = express();
+app.listen(4000, () => {
+  console.log("nyambungggg");
+});
 
 app.use(logger("dev"));
 app.use(express.json());
