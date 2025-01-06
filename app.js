@@ -2,6 +2,7 @@ const createError = require("http-errors");
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+const cors = require("cors");
 
 const adminRouter = require("./routes/admin/index");
 const customerRouter = require("./routes/customer/index");
@@ -11,6 +12,7 @@ app.listen(4000, () => {
   console.log("nyambungggg");
 });
 
+app.use(cors());
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
